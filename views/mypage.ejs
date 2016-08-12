@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+	<title>My Catelog</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+	<div class="page-header text-center">
+		<h1> <a href="/profile">My Catelog</a> | <a href="/users">User Page</a> | <a href="/catelog">Catelog Page</a></h1>
+        <% if (user.facebook.token) { %> <%= user.facebook.email %> <% } %>
+        <% if (user.google.token) { %> <%= user.google.email %> <% } %>
+		 | <a href="/logout">Logout</a>
+	</div>
+
+	<div class="row">
+
+		<div class="col-sm-12">
+            <h3 class="text-primary">My Catelog</h3>				
+            <table class="table">
+                <thead>
+                    <tr><th>Title</th><th>Description</th></tr>
+                </thead>
+                <tbody id="myCatalog"></tbody>
+            </table>
+		</div>
+        
+	</div>
+
+</div>
+</body>
+    <script>
+        var init = function(){
+            $.get('/api/source/personal',{},function(r){
+                var str = '';
+                for(var i = 0; i < r.length;i++){
+                    str += '<tr><td>'+r[i].item+'</td><td>'+r[i].description+'</td></tr>';
+                }
+                $('#myCatalog').html(str);
+            },'json');
+        }();
+    </script>
+</html>

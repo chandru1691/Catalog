@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+	<title>User Page</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+	<div class="page-header text-center">
+		<h1> <a href="/profile">My Catelog</a> | <a href="/users">User Page</a> | <a href="/catelog">Catelog Page</a></h1>
+        <% if (user.facebook.token) { %> <%= user.facebook.email %> <% } %>
+        <% if (user.google.token) { %> <%= user.google.email %> <% } %>
+		 | <a href="/logout">Logout</a>
+	</div>
+
+	<div class="row">
+
+		<div class="col-sm-12">
+            <h3 class="text-primary">User Page</h3>					
+            <table class="table">
+                <thead>
+                    <tr><th>Title</th><th>Description</th></tr>
+                </thead>
+                <tbody id="userList"></tbody>
+            </table>
+		</div>
+        
+	</div>
+
+</div>
+</body>
+    <script>
+        var init = function(){
+            $.get('/api/users',{},function(r){
+                var str = '';
+                for(var i = 0; i < r.length;i++){
+                    if(r[i].facebook)
+                        str += '<tr><td>'+r[i].facebook.name+'</td><td>'+r[i].facebook.email+'</td></tr>';
+                    else
+                        str += '<tr><td>'+r[i].google.name+'</td><td>'+r[i].google.email+'</td></tr>';
+                }
+                $('#userList').html(str);
+            },'json');
+        }();
+    </script>
+</html>
