@@ -30,5 +30,8 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
+// create index for collection
+userSchema.index({'$**': 'text'});
+
 // create the model for users and expose it to our app
 module.exports = mongoose.model('users', userSchema);

@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
+        th:not(:nth-child(3)) { width:15%; }
 	</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
@@ -13,7 +14,7 @@
 <div class="container">
 
 	<div class="page-header text-center">
-		<h1> <a href="/profile">My Catelog</a> | <a href="/users">User Page</a> | <a href="/catelog">Catelog Page</a></h1>
+		<h3> <a href="/profile">My Catelog</a> | <a href="/catelog">Catelogs</a> | <a href="/users">Users</a></h3>
         <% if (user.facebook.token) { %> <%= user.facebook.email %> <% } %>
         <% if (user.google.token) { %> <%= user.google.email %> <% } %>
 		 | <a href="/logout">Logout</a>
@@ -22,10 +23,18 @@
 	<div class="row">
 
 		<div class="col-sm-12">
-            <h3 class="text-primary">Catelog Page</h3>					
+            <h4 class="text-primary">Catelogs</h4>	
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                        <input type="text" class="form-control" id="catalogSearch" onkeyup="init()" placeholder="Search">
+                    </div>
+                </div>
+            </div>				
             <table class="table">
                 <thead>
-                    <tr><th>Title</th><th>Description</th><th>Action</th></tr>
+                    <tr><th>Title</th><th>ISBN</th><th>Description</th><th>Author</th><th>Action</th></tr>
                 </thead>
                 <tbody id="allCatalog"></tbody>
             </table>
@@ -35,21 +44,6 @@
 
 </div>
 </body>
-    <script>
-        var init = function(){
-            $.get('/api/source',{},function(r){
-                var str = '';
-                for(var i = 0; i < r.d.length;i++){
-                    str += '<tr><td>'+r.d[i].item+'</td><td>'+r.d[i].description+'</td><td>'+((r.d[i].access.indexOf(r.me) != -1)?'':'<a onclick="addMe(\''+r.d[i]._id+'\');">Add to My List</a>')+'</td></tr>';
-                }
-                $('#allCatalog').html(str);
-            },'json');
-        }();
-        var addMe = function(id){
-            var url = '/api/source/'+id;
-            $.put(url,function(r){
-                init();
-            },'json');
-        };
-    </script>
+    <script src="/js/common.js"></script>
+    <script src="/js/catalog.js"></script>
 </html>

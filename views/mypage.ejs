@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
+        th:not(:nth-child(3)) { width:15%; }
 	</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
@@ -13,7 +14,7 @@
 <div class="container">
 
 	<div class="page-header text-center">
-		<h1> <a href="/profile">My Catelog</a> | <a href="/users">User Page</a> | <a href="/catelog">Catelog Page</a></h1>
+		<h3> <a href="/profile">My Catelog</a> | <a href="/catelog">Catelogs</a> | <a href="/users">Users</a></h3>
         <% if (user.facebook.token) { %> <%= user.facebook.email %> <% } %>
         <% if (user.google.token) { %> <%= user.google.email %> <% } %>
 		 | <a href="/logout">Logout</a>
@@ -22,28 +23,50 @@
 	<div class="row">
 
 		<div class="col-sm-12">
-            <h3 class="text-primary">My Catelog</h3>				
-            <table class="table">
-                <thead>
-                    <tr><th>Title</th><th>Description</th></tr>
-                </thead>
-                <tbody id="myCatalog"></tbody>
-            </table>
+            <h4 class="text-primary">My Catelog <span class="btn btn-primary pull-right list-catalog" onclick="$('.list-catalog').hide();$('.add-catalog').show();$('form')[0].reset();">+ Add New</span></h4>
+            <div class="list-catalog">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                            <input type="text" class="form-control" id="myCatalogSearch" onkeyup="init()" placeholder="Search">
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr><th>Title</th><th>ISBN</th><th>Description</th><th>Author</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="myCatalog"></tbody>
+                </table>
+            </div>
+            <form class="add-catalog" style="display:none;">
+                <div class="form-group">
+                    <label for="title">Catalog Title</label>
+                    <input type="text" class="form-control" id="title" placeholder="title">
+                </div>
+                <div class="form-group">
+                    <label for="isbn">Catalog ISBN</label>
+                    <input type="text" class="form-control" id="isbn" placeholder="isbn">
+                </div>
+                <div class="form-group">
+                    <label for="description">Catalog Description</label>
+                    <input type="text" class="form-control" id="description" placeholder="description">
+                </div>
+                <div class="form-group">
+                    <label for="author">Catalog Author</label>
+                    <input type="text" class="form-control" id="author" placeholder="author">
+                </div>
+                <div>
+                    <button type="button" class="btn btn-default" onclick="$('.add-catalog').hide();$('.list-catalog').show()">Cancel</button><button type="button" class="btn btn-success" onclick="addmodifyCatalog();">Save</button>
+                </div>
+            </form>
 		</div>
         
 	</div>
 
 </div>
 </body>
-    <script>
-        var init = function(){
-            $.get('/api/source/personal',{},function(r){
-                var str = '';
-                for(var i = 0; i < r.length;i++){
-                    str += '<tr><td>'+r[i].item+'</td><td>'+r[i].description+'</td></tr>';
-                }
-                $('#myCatalog').html(str);
-            },'json');
-        }();
-    </script>
+    <script src="/js/common.js"></script>
+    <script src="/js/mypage.js"></script>
 </html>

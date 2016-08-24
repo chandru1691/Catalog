@@ -22,6 +22,8 @@ app.configure(function () {
     app.use(express.bodyParser());
 
     app.set('view engine', 'ejs');
+    
+    app.use(express.static('public'));
 
     // required for passport
     app.use(express.session({

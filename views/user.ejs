@@ -6,6 +6,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
+        th:nth-child(odd) { width:30%; }
+        .user-catalog th:not(:nth-child(3)) { width:15%; }
 	</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
@@ -13,7 +15,7 @@
 <div class="container">
 
 	<div class="page-header text-center">
-		<h1> <a href="/profile">My Catelog</a> | <a href="/users">User Page</a> | <a href="/catelog">Catelog Page</a></h1>
+		<h3> <a href="/profile">My Catelog</a> | <a href="/catelog">Catelogs</a> | <a href="/users">Users</a></h3>
         <% if (user.facebook.token) { %> <%= user.facebook.email %> <% } %>
         <% if (user.google.token) { %> <%= user.google.email %> <% } %>
 		 | <a href="/logout">Logout</a>
@@ -22,31 +24,46 @@
 	<div class="row">
 
 		<div class="col-sm-12">
-            <h3 class="text-primary">User Page</h3>					
-            <table class="table">
-                <thead>
-                    <tr><th>Title</th><th>Description</th></tr>
-                </thead>
-                <tbody id="userList"></tbody>
-            </table>
+            <div class="user-list">
+                <h4 class="text-primary">Users</h4>	
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                            <input type="text" class="form-control" id="userSearch" onkeyup="init()" placeholder="Search">
+                        </div>
+                    </div>
+                </div>			
+                <table class="table">
+                    <thead>
+                        <tr><th>Name</th><th>Email</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="userList"></tbody>
+                </table>
+            </div>
+            <div class="user-catalog" style="display:none;">
+                <h4 class="text-primary"><span class="head">Users</span><span class="glyphicon glyphicon-log-out pull-right" onclick="$('.user-catalog').hide();$('.user-list').show();"></span></h4>	
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                            <input type="text" class="form-control" id="userCatalogSearch" onkeyup="viewCatalog($(this))" placeholder="Search">
+                        </div>
+                    </div>
+                </div>			
+                <table class="table">
+                    <thead>
+                        <tr><th>Title</th><th>ISBN</th><th>Description</th><th>Author</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="userCatalogList"></tbody>
+                </table>
+            </div>
 		</div>
         
 	</div>
 
 </div>
 </body>
-    <script>
-        var init = function(){
-            $.get('/api/users',{},function(r){
-                var str = '';
-                for(var i = 0; i < r.length;i++){
-                    if(r[i].facebook)
-                        str += '<tr><td>'+r[i].facebook.name+'</td><td>'+r[i].facebook.email+'</td></tr>';
-                    else
-                        str += '<tr><td>'+r[i].google.name+'</td><td>'+r[i].google.email+'</td></tr>';
-                }
-                $('#userList').html(str);
-            },'json');
-        }();
-    </script>
+    <script src="/js/common.js"></script>
+    <script src="/js/user.js"></script>
 </html>
